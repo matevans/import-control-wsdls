@@ -56,9 +56,7 @@ trait IntegrationSpecBase
     "auditing.consumer.baseUri.host" -> s"$mockHost",
     "auditing.consumer.baseUri.port" -> s"$mockPort",
     "microservice.services.auth.host" -> s"$mockHost",
-    "microservice.services.auth.port" -> s"$mockPort",
-    "auditing.consumer.baseUri.host" -> s"$mockHost",
-    "auditing.consumer.baseUri.port" -> s"$mockPort"
+    "microservice.services.auth.port" -> s"$mockPort"
   )
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(

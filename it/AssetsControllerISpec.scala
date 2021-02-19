@@ -46,7 +46,7 @@ class AssetsControllerISpec extends IntegrationSpecBase {
   wsdlOperationsForFileNames.map {
     case (fileName, wsdlOperationList) =>
       s"/assets/wsdl/$fileName" when {
-        val wsdlUrl = wsdlBaseUrl + URLEncoder.encode(fileName, "UTF-8")
+        val wsdlUrl = wsdlBaseUrl + fileName
         s"a request is made for $fileName" should {
           val operations = parseWsdlAndGetOperationsNames(wsdlUrl)
           wsdlOperationList.foreach(

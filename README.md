@@ -1,7 +1,31 @@
 
 # import-control-wsdls
 
-This is a placeholder README.md for a new repository
+This service is used to get the wsdl files.
+
+## Development Setup
+- Run locally: `sbt run` which runs on port `7208` by default
+
+## Tests
+
+Run Integration Tests: `sbt it:test`
+
+## GET /assets/wsdl/:wsdlFileName
+
+Where wsdlFileName is one of:
+- CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_1.0.0
+- CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_CCN2_1.0.0
+- CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_1.0.0
+- CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_CCN2_1.0.0
+- CCN2.Service.Platform.SecurityPolicies
+
+### Response
+HTTP Status code of 200 is returned with the wsdl file when wsdlFileName exists.
+
+### Error scenarios
+| Scenario | HTTP Status |
+| --- | --- |
+| `wsdlFileName` not recognised | `404` |
 
 ### License
 

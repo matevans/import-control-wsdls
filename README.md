@@ -10,14 +10,14 @@ This service is used to get the wsdl files.
 
 Run Integration Tests: `sbt it:test`
 
-## GET /assets/wsdl/:wsdlFileName
+## GET /assets/wsdl/eu/outbound/CR-for-NES-Services/:wsdlFileName
 
 Where wsdlFileName is one of:
-- CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_1.0.0
-- CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_CCN2_1.0.0
-- CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_1.0.0
-- CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_CCN2_1.0.0
-- CCN2.Service.Platform.SecurityPolicies
+- "BusinessActivityService/ICS/ReferralManagementBAS/V1/CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_1.0.0.wsdl"
+- "BusinessActivityService/ICS/ReferralManagementBAS/V1CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_CCN2_1.0.0.wsdl"
+- "BusinessActivityService/ICS/RiskAnalysisOrchestrationBAS/V1/CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_1.0.0.wsdl"
+- "BusinessActivityService/ICS/RiskAnalysisOrchestrationBAS/V1/CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_CCN2_1.0.0.wsdl"
+- "Policies/CCN2/CCN2.Service.Platform.SecurityPolicies.wsdl"
 
 ### Response
 HTTP Status code of 200 is returned with the wsdl file when wsdlFileName exists.
@@ -26,6 +26,12 @@ HTTP Status code of 200 is returned with the wsdl file when wsdlFileName exists.
 | Scenario | HTTP Status |
 | --- | --- |
 | `wsdlFileName` not recognised | `404` |
+
+### Notes for Individual updating the wsdl files
+- Current Version of EU requirements `V2.21`
+- The folder structure was directly copied from the EU documentation
+- Renamed the top level folder to `CR-for-NES-Services` (removing any remnants of a number)
+- We replaced `{DestinationID}` in all filenames that contained it with `EU.CR`
 
 ### License
 

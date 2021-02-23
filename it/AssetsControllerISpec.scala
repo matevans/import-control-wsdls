@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import java.net.URLEncoder
+import java.io.File
 
 import helpers.IntegrationSpecBase
 import javax.wsdl.xml.WSDLReader
@@ -23,29 +23,32 @@ import org.apache.axis2.wsdl.WSDLUtil
 
 import scala.collection.JavaConverters._
 
+
 class AssetsControllerISpec extends IntegrationSpecBase {
 
-  val wsdlBaseUrl = s"http://localhost:$port/assets/wsdl/"
-
+  val wsdlBaseUrl = s"http://localhost:$port/assets/wsdl/eu/outbound/CR-for-NES-Services/"
   val wsdlOperationsForFileNames = Map(
-    "CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_CCN2_1.0.0.wsdl" -> List(
+    "BusinessActivityService/ICS/ReferralManagementBAS/V1/CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_CCN2_1.0.0.wsdl" -> List(
       "IE4Q04requestAdditionalInformation",
       "IE4R02provideAdditionalInformation",
       "IE4Q05requestHRCM",
       "IE4R03provideHRCMResult"
     ),
-    "CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_CCN2_1.0.0.wsdl" -> List(
+    "BusinessActivityService/ICS/RiskAnalysisOrchestrationBAS/V1/CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_CCN2_1.0.0.wsdl" -> List(
       "IE4N03notifyERiskAnalysisHit",
       "IE4S01submitEScreeningAssessment",
       "IE4S02submitRiskAnalysisResult",
       "IE4S02updateERiskAnalysisResult",
       "IE4S01updateEScreeningResult"
-    )
+    ),
+//    "Policies/CCN2/CCN2.Service.Platform.SecurityPolicies.wsdl" -> List.empty,
+    "BusinessActivityService/ICS/RiskAnalysisOrchestrationBAS/V1/CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_1.0.0.wsdl" -> List.empty,
+    "BusinessActivityService/ICS/ReferralManagementBAS/V1/CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_CCN2_1.0.0.wsdl" -> List.empty
   )
 
   wsdlOperationsForFileNames.map {
     case (fileName, wsdlOperationList) =>
-      s"/assets/wsdl/$fileName" when {
+      s"$wsdlBaseUrl" when {
         val wsdlUrl = wsdlBaseUrl + fileName
         s"a request is made for $fileName" should {
           val operations = parseWsdlAndGetOperationsNames(wsdlUrl)
@@ -58,6 +61,7 @@ class AssetsControllerISpec extends IntegrationSpecBase {
         }
       }
   }
+
 
   def parseWsdlAndGetOperationsNames(wsdlUrl: String): List[String] = {
     val reader: WSDLReader =

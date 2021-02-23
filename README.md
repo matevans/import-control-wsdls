@@ -27,7 +27,8 @@ HTTP Status code of 200 is returned with the wsdl file when wsdlFileName exists.
 | --- | --- |
 | `wsdlFileName` not recognised | `404` |
 
-### Notes for Individual updating the wsdl files
+### Notes for Developer updating the wsdl files
+
 - Current Version of EU requirements `V2.21`
 - The folder structure was directly copied from the EU documentation
 - Renamed the top level folder to `CR-for-NES-Services` (removing any remnants of a number)

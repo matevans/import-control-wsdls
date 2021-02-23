@@ -27,7 +27,6 @@ import scala.io.Source
 import scala.util.Try
 import scala.xml.XML
 
-
 class AssetsControllerISpec extends IntegrationSpecBase {
 
   val wsdlBaseUrl = s"http://localhost:$port/assets/wsdl/eu/outbound/CR-for-NES-Services/"
@@ -53,7 +52,7 @@ class AssetsControllerISpec extends IntegrationSpecBase {
     val xmlSchemaExtension = ".xsd"
     val xmlWsdlExtension = ".wsdl"
     val baseDirectory = new File(app.path.getCanonicalPath + "/public/wsdl/eu/outbound/CR-for-NES-Services" )
-    val allFilesFromEU = recursiveListFiles(baseDirectory).filter(_.isFile)
+    val allFilesFromEU = recursiveListFiles(baseDirectory).filter(_.isFile).filterNot(_.isHidden)
 
     "be correct amount of xsds and wsdls" in {
       allFilesFromEU.count(file => file.getName.contains(xmlSchemaExtension) || file.getName.contains(xmlWsdlExtension)) shouldBe 65
@@ -66,11 +65,11 @@ class AssetsControllerISpec extends IntegrationSpecBase {
     s"return ${Status.OK} and parse to xml if $xmlSchemaExtension / $xmlWsdlExtension" when {
       allFilesFromEU.foreach( eachFile =>
         s"file is ${eachFile.getName}" in {
-          val fileToBeTested = eachFile.getCanonicalPath.split("/CR-for-NES-Services/")(1).trim
-          val resultOfGettingAsset = await(buildClient(s"/assets/wsdl/eu/outbound/CR-for-NES-Services/$fileToBeTested").get())
+          val pathToFile = eachFile.getCanonicalPath.split("/CR-for-NES-Services/")(1).trim
+          val resultOfGettingAsset = await(buildClient(s"/assets/wsdl/eu/outbound/CR-for-NES-Services/$pathToFile").get())
           resultOfGettingAsset.status shouldBe Status.OK
 
-          if(fileToBeTested.contains(xmlSchemaExtension) || fileToBeTested.contains(xmlWsdlExtension)) {
+          if(pathToFile.contains(xmlSchemaExtension) || pathToFile.contains(xmlWsdlExtension)) {
             val fileFromDirectoryParsed = {
               Try(XML.load(new ByteArrayInputStream(Source.fromFile(eachFile,"UTF-8").mkString.getBytes("UTF-8"))))
             }

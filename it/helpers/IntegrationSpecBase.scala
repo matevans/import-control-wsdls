@@ -19,6 +19,7 @@ package helpers
 import akka.http.scaladsl.model.HttpResponse
 import com.github.tomakehurst.wiremock.stubbing.StubMapping
 import helpers.WiremockHelper.stubPost
+import javax.xml.parsers.SAXParserFactory
 import org.scalatest.concurrent.{Eventually, IntegrationPatience, ScalaFutures}
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.time.{Millis, Seconds, Span}
@@ -89,6 +90,5 @@ trait IntegrationSpecBase
     stopWiremock()
     super.afterAll()
   }
-
   protected def stubAudit: StubMapping = stubPost(s"/write/audit", Status.OK)
 }

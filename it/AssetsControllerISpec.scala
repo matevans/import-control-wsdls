@@ -14,14 +14,18 @@
  * limitations under the License.
  */
 
-import java.io.File
+import java.io.{ByteArrayInputStream, File}
 
 import helpers.IntegrationSpecBase
 import javax.wsdl.xml.WSDLReader
 import javax.wsdl.{Operation, PortType}
 import org.apache.axis2.wsdl.WSDLUtil
+import play.api.http.Status
 
 import scala.collection.JavaConverters._
+import scala.io.Source
+import scala.util.Try
+import scala.xml.XML
 
 
 class AssetsControllerISpec extends IntegrationSpecBase {
@@ -41,10 +45,42 @@ class AssetsControllerISpec extends IntegrationSpecBase {
       "IE4S02updateERiskAnalysisResult",
       "IE4S01updateEScreeningResult"
     ),
-//    "Policies/CCN2/CCN2.Service.Platform.SecurityPolicies.wsdl" -> List.empty,
     "BusinessActivityService/ICS/RiskAnalysisOrchestrationBAS/V1/CCN2.Service.Customs.Default.ICS.RiskAnalysisOrchestrationBAS_1.0.0_1.0.0.wsdl" -> List.empty,
     "BusinessActivityService/ICS/ReferralManagementBAS/V1/CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_CCN2_1.0.0.wsdl" -> List.empty
   )
+
+  "all EU Files within public folder" should {
+    val xmlSchemaExtension = ".xsd"
+    val xmlWsdlExtension = ".wsdl"
+    val baseDirectory = new File(app.path.getCanonicalPath + "/public/wsdl/eu/outbound/CR-for-NES-Services" )
+    val allFilesFromEU = recursiveListFiles(baseDirectory).filter(_.isFile)
+
+    "be correct amount of xsds and wsdls" in {
+      allFilesFromEU.count(file => file.getName.contains(xmlSchemaExtension) || file.getName.contains(xmlWsdlExtension)) shouldBe 65
+    }
+
+    "not contain {DestinationID} as this should have been replaced" in {
+      allFilesFromEU.exists(_.getName.contains("{DestinationID}")) shouldBe false
+    }
+
+    s"return ${Status.OK} and parse to xml if $xmlSchemaExtension / $xmlWsdlExtension" when {
+      allFilesFromEU.foreach( eachFile =>
+        s"file is ${eachFile.getName}" in {
+          val fileToBeTested = eachFile.getCanonicalPath.split("/CR-for-NES-Services/")(1).trim
+          val resultOfGettingAsset = await(buildClient(s"/assets/wsdl/eu/outbound/CR-for-NES-Services/$fileToBeTested").get())
+          resultOfGettingAsset.status shouldBe Status.OK
+
+          if(fileToBeTested.contains(xmlSchemaExtension) || fileToBeTested.contains(xmlWsdlExtension)) {
+            val fileFromDirectoryParsed = {
+              Try(XML.load(new ByteArrayInputStream(Source.fromFile(eachFile,"UTF-8").mkString.getBytes("UTF-8"))))
+            }
+            fileFromDirectoryParsed.isSuccess shouldBe true
+            fileFromDirectoryParsed.get shouldBe XML.load(new ByteArrayInputStream(resultOfGettingAsset.body.getBytes("UTF-8")))
+          }
+        }
+      )
+    }
+  }
 
   wsdlOperationsForFileNames.map {
     case (fileName, wsdlOperationList) =>
@@ -62,6 +98,10 @@ class AssetsControllerISpec extends IntegrationSpecBase {
       }
   }
 
+  def recursiveListFiles(f: File): Array[File] = {
+    val these = f.listFiles
+    these ++ these.filter(_.isDirectory).flatMap(recursiveListFiles)
+}
 
   def parseWsdlAndGetOperationsNames(wsdlUrl: String): List[String] = {
     val reader: WSDLReader =

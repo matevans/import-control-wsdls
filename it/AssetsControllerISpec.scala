@@ -63,7 +63,7 @@ class AssetsControllerISpec extends IntegrationSpecBase {
       allFilesFromEU.exists(_.getName.contains("{DestinationID}")) shouldBe false
     }
 
-    s"return ${Status.OK} and parse to xml if $xmlSchemaExtension / $xmlWsdlExtension" when {
+    s"return ${Status.OK} and parse to xml" when {
       allFilesFromEU.foreach( eachFile =>
         s"file is ${eachFile.getName}" in {
           val pathToFile = eachFile.getCanonicalPath.split("/CR-for-NES-Services/")(1).trim

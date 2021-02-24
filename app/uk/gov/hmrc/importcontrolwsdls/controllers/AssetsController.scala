@@ -16,18 +16,29 @@
 
 package uk.gov.hmrc.importcontrolwsdls.controllers
 
-import javax.inject.{Inject, Singleton}
+import akka.actor.ActorSystem
+import akka.pattern.after
+import com.google.inject.Singleton
+import controllers.Assets
+import javax.inject.Inject
 import play.api.mvc.{Action, AnyContent, ControllerComponents}
-import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 import uk.gov.hmrc.importcontrolwsdls.config.AppConfig
+import uk.gov.hmrc.play.bootstrap.backend.controller.BackendController
 
-import scala.concurrent.Future
+import scala.concurrent.ExecutionContext
 
-@Singleton()
-class MicroserviceHelloWorldController @Inject()(appConfig: AppConfig, cc: ControllerComponents)
+@Singleton
+class AssetsController @Inject()(
+  cc: ControllerComponents,
+  actorSystem: ActorSystem,
+  appConfig: AppConfig,
+  assets: Assets
+)(implicit val ec: ExecutionContext)
     extends BackendController(cc) {
 
-  def hello(): Action[AnyContent] = Action.async { implicit request =>
-    Future.successful(Ok("Hello world"))
+  def at(file: String): Action[AnyContent] = Action.async { implicit request =>
+    after(appConfig.assetsDelay, actorSystem.scheduler) {
+      assets.at(file)(request)
+    }
   }
 }

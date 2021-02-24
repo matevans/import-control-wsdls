@@ -56,6 +56,7 @@ class AssetsControllerISpec extends IntegrationSpecBase {
 
     "be correct amount of xsds and wsdls" in {
       allFilesFromEU.count(file => file.getName.contains(xmlSchemaExtension) || file.getName.contains(xmlWsdlExtension)) shouldBe 65
+      allFilesFromEU.length shouldBe 65
     }
 
     "not contain {DestinationID} as this should have been replaced" in {
@@ -69,13 +70,17 @@ class AssetsControllerISpec extends IntegrationSpecBase {
           val resultOfGettingAsset = await(buildClient(s"/assets/wsdl/eu/outbound/CR-for-NES-Services/$pathToFile").get())
           resultOfGettingAsset.status shouldBe Status.OK
 
-          if(pathToFile.contains(xmlSchemaExtension) || pathToFile.contains(xmlWsdlExtension)) {
-            val fileFromDirectoryParsed = {
-              Try(XML.load(new ByteArrayInputStream(Source.fromFile(eachFile,"UTF-8").mkString.getBytes("UTF-8"))))
-            }
-            fileFromDirectoryParsed.isSuccess shouldBe true
-            fileFromDirectoryParsed.get shouldBe XML.load(new ByteArrayInputStream(resultOfGettingAsset.body.getBytes("UTF-8")))
-          }
+            val sourceOfFile = Source.fromFile(eachFile,"UTF-8")
+            val byteArrayStreamOfFile = new ByteArrayInputStream(sourceOfFile.mkString.getBytes
+            ("UTF-8"))
+            val byeArrayStreamOfBody = new ByteArrayInputStream(resultOfGettingAsset.body.getBytes("UTF-8"))
+            val fileFromDirectoryParsed = Try(XML.load(byteArrayStreamOfFile))
+
+            fileFromDirectoryParsed.get shouldBe XML.load(byeArrayStreamOfBody)
+
+            sourceOfFile.close()
+            byteArrayStreamOfFile.close()
+            byeArrayStreamOfBody.close()
         }
       )
     }
@@ -91,7 +96,7 @@ class AssetsControllerISpec extends IntegrationSpecBase {
             wsdlOperation =>
               s"include the operation $wsdlOperation" in {
                 operations should contain(wsdlOperation)
-            }
+              }
           )
         }
       }
@@ -100,7 +105,7 @@ class AssetsControllerISpec extends IntegrationSpecBase {
   def recursiveListFiles(f: File): Array[File] = {
     val these = f.listFiles
     these ++ these.filter(_.isDirectory).flatMap(recursiveListFiles)
-}
+  }
 
   def parseWsdlAndGetOperationsNames(wsdlUrl: String): List[String] = {
     val reader: WSDLReader =

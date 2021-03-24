@@ -31,9 +31,9 @@
   </wsdl:binding>
   <wsdl:service name="CCN2.Service.Customs.EU.ICS.RulesConfigurationManagementDS">
     <wsdl:port name="RulesConfigurationManagementDS" binding="RulesConfigurationManagementDSSoapBinding">
-      <soap12:address location="http://{ccn2Host}:{ccn2Port}/CCN2.Service.Customs.EU.ICS.RulesConfigurationManagementDS" />
+      <soap12:address location="https://api-platform-test.protected.mdtp/destination/notifications?status=202" />
       <wsa:EndpointReference>
-        <wsa:Address>http://{ccn2Host}:{ccn2Port}/CCN2.Service.Customs.EU.ICS.RulesConfigurationManagementDS</wsa:Address>
+        <wsa:Address>https://api-platform-test.protected.mdtp/destination/notifications?status=202</wsa:Address>
         <wsa:Metadata>
           <ccn2:ServiceID>CCN2.Service.Customs.EU.ICS.RulesConfigurationManagementDS</ccn2:ServiceID>
           <ccn2:ServiceName>CCN2.Service.Customs.EU.ICS.RulesConfigurationManagementDS</ccn2:ServiceName>

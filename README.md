@@ -10,10 +10,15 @@ This service is used to get files for ICS2.
 
 Run Integration Tests: `sbt it:test`
 
-## GET /assets/wsdl/eu/outbound/CR-for-NES-Services/:fileNameAndPath
+## GET /assets/:prodOrTest/eu/outbound/CR-for-NES-Services/:fileNameAndPath
 
-Where `:fileNameAndPath` could be:
-- any file within the `CR-for-NES-Services` file structure in the `public` folder
+Where 
+- `:prodOrTest` is one of:
+ - prod for production environment
+ - test for all other environments
+Both prod and test contain the same files structure but the `soap12:address location` and `wsa:Address` within the files differ depending on the environment. 
+- `:fileNameAndPath` could be  any file within the `CR-for-NES-Services` file structure in the `public` folder
+
 With some common top level files referenced below, used in the `import-control-outbound-proxy` microservice
 - BusinessActivityService/ICS/ReferralManagementBAS/V1/CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_1.0.0.wsdl
 - BusinessActivityService/ICS/ReferralManagementBAS/V1CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_CCN2_1.0.0.wsdl

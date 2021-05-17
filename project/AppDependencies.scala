@@ -6,7 +6,7 @@ import sbt._
 object AppDependencies {
 
   val compile = Seq(
-    "uk.gov.hmrc" %% "bootstrap-backend-play-27" % "4.3.0",
+    "uk.gov.hmrc" %% "bootstrap-backend-play-27" % "5.2.0",
     "org.apache.axis2" % "axis2-kernel" % "1.7.9"
   )
 

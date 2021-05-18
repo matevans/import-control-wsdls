@@ -20,8 +20,6 @@ lazy val scalaStyleSettings = Seq(scalastyleFailOnError := true)
 lazy val microservice = Project(appName, file("."))
   .enablePlugins(
     play.sbt.PlayScala,
-    SbtAutoBuildPlugin,
-    SbtGitVersioning,
     SbtDistributablesPlugin
   )
   .settings(

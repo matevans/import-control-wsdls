@@ -19,9 +19,9 @@
   </wsdl:binding>
   <wsdl:service name="CCN2.Service.Customs.EU.ICS.CRErrorNotificationBAS">
     <wsdl:port name="CRErrorNotificationBAS" binding="CRErrorNotificationBASSoapBinding">
-      <soap12:address location="https://api-platform-test.protected.mdtp/destination/notifications?status=202" />
+      <soap12:address location="https://{ccn2Host}:{ccn2Port}/CCN2.Service.Customs.EU.ICS.CRErrorNotificationBAS" />
       <wsa:EndpointReference>
-        <wsa:Address>https://api-platform-test.protected.mdtp/destination/notifications?status=202</wsa:Address>
+        <wsa:Address>https://{ccn2Host}:{ccn2Port}/CCN2.Service.Customs.EU.ICS.CRErrorNotificationBAS</wsa:Address>
         <wsa:Metadata>
           <ccn2:ServiceID>CCN2.Service.Customs.EU.ICS.CRErrorNotificationBAS</ccn2:ServiceID>
           <ccn2:ServiceName>CCN2.Service.Customs.EU.ICS.CRErrorNotificationBAS</ccn2:ServiceName>

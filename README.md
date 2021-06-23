@@ -3,6 +3,7 @@
 
 This service is used to get files for ICS2.
 
+
 ## Development Setup
 - Run locally: `sbt run` which runs on port `7208` by default
 
@@ -12,13 +13,13 @@ Run Integration Tests: `sbt it:test`
 
 ## GET /assets/:prodOrTest/eu/outbound/CR-for-NES-Services/:fileNameAndPath
 
+
 Where 
 - `:prodOrTest` is one of:
- - prod for production environment
- - test for all other environments
-Both prod and test contain the same files structure but the `soap12:address location` and `wsa:Address` within the files differ depending on the environment. 
-- `:fileNameAndPath` could be  any file within the `CR-for-NES-Services` file structure in the `public` folder
-
+ - ~~prod for production environment~~
+ - **test for all environments (prod folder is currently tech debt until further notice)**
+ - `:fileNameAndPath` could be  any file within the `CR-for-NES-Services` file structure in the `public` folder
+ 
 With some common top level files referenced below, used in the `import-control-outbound-proxy` microservice
 - BusinessActivityService/ICS/ReferralManagementBAS/V1/CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_1.0.0.wsdl
 - BusinessActivityService/ICS/ReferralManagementBAS/V1CCN2.Service.Customs.Default.ICS.ReferralManagementBAS_1.0.0_CCN2_1.0.0.wsdl
@@ -40,6 +41,9 @@ HTTP Status code of 200 is returned with the file when `:fileNameAndPath` exists
 - The folder structure was directly copied from the EU documentation
 - Renamed the top level folder to `CR-for-NES-Services` (removing any remnants of a number)
 - We replaced `{DestinationID}` in all filenames that contained it with `EU.CR`
+- We amended  `soap12:address location` and `wsa:Address` from http, to https, apart from that URLS should be as per from the EU
+- Both prod and test contain the same files structure but the `soap12:address location` and `wsa:Address` within the files differ currently. But this implementation may change.
+
 
 ### License
 

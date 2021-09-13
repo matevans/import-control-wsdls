@@ -34,7 +34,7 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration.Duration
 
 trait IntegrationSpecBase
-    extends AnyWordSpec
+  extends AnyWordSpec
     with TestSuite
     with ScalaFutures
     with IntegrationPatience
@@ -56,7 +56,8 @@ trait IntegrationSpecBase
     "auditing.consumer.baseUri.host" -> s"$mockHost",
     "auditing.consumer.baseUri.port" -> s"$mockPort",
     "microservice.services.auth.host" -> s"$mockHost",
-    "microservice.services.auth.port" -> s"$mockPort"
+    "microservice.services.auth.port" -> s"$mockPort",
+    "play.filters.https.redirectEnabled" -> "false"
   )
 
   override implicit val patienceConfig: PatienceConfig = PatienceConfig(
@@ -89,5 +90,6 @@ trait IntegrationSpecBase
     stopWiremock()
     super.afterAll()
   }
+
   protected def stubAudit: StubMapping = stubPost(s"/write/audit", Status.OK)
 }

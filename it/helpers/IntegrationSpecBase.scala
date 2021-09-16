@@ -34,7 +34,7 @@ import scala.concurrent.{Await, ExecutionContext, Future}
 import scala.concurrent.duration.Duration
 
 trait IntegrationSpecBase
-    extends AnyWordSpec
+  extends AnyWordSpec
     with TestSuite
     with ScalaFutures
     with IntegrationPatience
@@ -89,5 +89,6 @@ trait IntegrationSpecBase
     stopWiremock()
     super.afterAll()
   }
+
   protected def stubAudit: StubMapping = stubPost(s"/write/audit", Status.OK)
 }
